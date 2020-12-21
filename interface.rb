@@ -19,30 +19,8 @@ class Interface
   def play_rounds
     begin
       while gm.continue_round?
-        show_cards(gm.user_gamer)
 
-        # show quantity of hide robot cards
-        print "#{gm.robot.name}'s cards:"
-        gm.robot.cards.each { |_card| print '*' }
-
-        puts ''
-        puts 'Enter a number what would you like to do'
-        puts 'skip your turn - 1'
-        puts 'take a card - 2'
-        puts "show player's cards and finish the game - 3"
-        cmd = gets.to_i
-
-        case cmd
-        when 1
-          gm.pass
-        when 2
-          gm.add_card
-        when 3
-          finish_game
-          return
-        else
-          raise 'Wrong command number'
-        end
+        cmd = play_for_user
 
         break unless gm.continue_round?
         gm.play_for_robot
@@ -54,6 +32,35 @@ class Interface
     end
 
     finish_game
+  end
+
+  def play_for_user
+    show_cards(gm.user_gamer)
+
+    # show quantity of hide robot cards
+    print "#{gm.robot.name}'s cards: "
+    gm.robot.cards.each { |_card| print '*' }
+
+    puts ''
+    puts 'Enter a number what would you like to do'
+    puts 'skip your turn - 1'
+    puts 'take a card - 2'
+    puts "show player's cards and finish the game - 3"
+    puts 'game over - 4'
+    cmd = gets.to_i
+
+    case cmd
+    when 1
+      gm.pass
+    when 2
+      gm.add_card
+    when 3
+      finish_game
+    when 4
+      return
+    else
+      raise 'Wrong command number'
+    end
   end
 
   def finish_game
@@ -84,7 +91,7 @@ class Interface
         retry
       end
     else
-      puts "#{winner.name}'s balance is empty. You can start a new game!"
+      puts "#{gm.loser.name}'s balance is empty. You can start a new game!"
       return
     end
   end

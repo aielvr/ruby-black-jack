@@ -45,7 +45,6 @@ class GameManager
 
   def add_card
     card = get_random_card
-    puts "card: #{card}"
     current_gamer.add_card(card)
   end
 
@@ -62,7 +61,7 @@ class GameManager
 
   # check does user and robot have enough money for next round
   def next_round?
-    user_gamer.balance > 0 && robot.balance > 0
+    user_gamer.balance > 0 || robot.balance > 0
   end
 
   def continue_round?
@@ -77,6 +76,11 @@ class GameManager
     return user_gamer if user_gamer.points > robot.points
     return robot if robot.points > user_gamer.points
     nil
+  end
+
+  def loser
+    return robot if robot.balance.zero?
+    return user_gamer if user_gamer.balance.zero?
   end
 
   def next_round_initialize
